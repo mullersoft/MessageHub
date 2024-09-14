@@ -4,8 +4,13 @@ import globalErrorHandler from "./controllers/errorController";
 import messageRouter from "./routes/messageRoute";
 import categoryRouter from "./routes/categoryRoute";
 import userRouter from "./routes/userRoute";
+import cors from 'cors';
+
+
 const app = express();
 
+// Add this before your routes
+app.use(cors());
 app.use(express.json({ limit: "10kb" }));
 
 // Middleware to parse URL-encoded bodies

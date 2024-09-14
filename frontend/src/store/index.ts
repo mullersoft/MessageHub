@@ -1,11 +1,9 @@
-// frontend/src/store/index.ts
-
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
-import categoryReducer from './slices/categorySlice'; // Ensure default export
-import messageReducer from './slices/messageSlice'; // Ensure default export
+import categoryReducer from './slices/categorySlice';
+import messageReducer from './slices/messageSlice';
+import userReducer from './slices/userSlice';
 import rootSaga from './sagas';
-import userReducer from './slices/userSlice'; // Ensure default export
 
 const sagaMiddleware = createSagaMiddleware();
 

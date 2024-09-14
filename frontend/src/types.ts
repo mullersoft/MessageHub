@@ -1,31 +1,34 @@
-// frontend/src/types.ts
-
 // src/types.ts
 
 export interface ICategory {
   _id: string;
   name: string;
-  description?: string; // Add this if the description is optional
+  description?: string; // Optional description field
 }
 
-
-// frontend/src/types.ts
 export interface IMessage {
-    _id: string;  // Add _id if it exists in the data
-    text: string;
-    category: string;
-    author: string;
-    likes: number;
-    createdAt?: Date;
-    updatedAt?: Date;
-  }
-  
-  // frontend/src/types.ts
+  _id: string;
+  text: string;
+  category: ICategory; // Changed from string to ICategory
+  author: string;
+  likes: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+// export interface IMessage {
+//   _id: string;
+//   text: string;
+//   category: {
+//     _id: string;
+//     name: string;
+//   };
+//   author?: string; // Optional field
+//   likes?: number;  // Optional field
+// }
 
 export interface IUser {
-    id: string;
-    name: string;
-    email: string;
-    // Add other user properties here
-  }
-  
+  id: string;
+  name: string;
+  email: string;
+  // Add other user properties here
+}

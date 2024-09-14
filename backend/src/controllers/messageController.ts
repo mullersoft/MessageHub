@@ -3,22 +3,26 @@ import Message from "../models/messageModel";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
 // Create a new message
+// Backend: messageController.ts
 const createMessage = catchAsync(async (req: Request, res: Response) => {
+  console.log("Request Body:", req.body); // Debugging
   const message = await Message.create(req.body);
+  console.log("Created Message:", message); // Debugging
   res.status(201).json({
     status: "success",
     data: { message },
   });
 });
-// Get all messages
+
 const getMessages = catchAsync(async (req: Request, res: Response) => {
-  const messages = await Message.find();
+  const messages = await Message.find().populate("category"); // Populate category field
   res.status(200).json({
     status: "success",
     results: messages.length,
     data: { data: messages },
   });
 });
+
 const getMessageById = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     if (!req.params.id) {
@@ -51,38 +55,36 @@ const deleteMessage = catchAsync(
     if (!message) {
       return next(new AppError("No document found with that ID", 404));
     }
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
+    res.status(204).json({ status: "success", data: null });
   }
 );
-  // Assuming you have a message model or 
 
-  const getMessagesByCategory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+// Assuming you have a message model or
+
+const getMessagesByCategory = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { categoryId } = req.params;
-  
+
     if (!categoryId) {
       return next(new AppError("Category ID is required", 400));
     }
-  
+
     const messages = await Message.find({ category: categoryId });
-  
+
     if (!messages || messages.length === 0) {
       return res.status(404).json({
-        status: 'fail',
-        message: 'No messages found for this category',
+        status: "fail",
+        message: "No messages found for this category",
       });
     }
-  
+
     res.status(200).json({
-      status: 'success',
+      status: "success",
       results: messages.length,
       data: { messages },
     });
-  });
-  
-  
+  }
+);
 
 export {
   createMessage,

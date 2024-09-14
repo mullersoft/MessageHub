@@ -5,6 +5,16 @@ import { RootState, AppDispatch } from '../store';
 import { fetchMessagesRequest } from '../store/slices/messageSlice'; // Ensure this import matches your actual slice
 import { useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Function to copy text to clipboard
+const copyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text).then(
+    () => toast.success('Message copied to clipboard!'),
+    (err) => toast.error('Failed to copy text: ' + err)
+  );
+};
 
 const MessageList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -26,11 +36,15 @@ const MessageList: React.FC = () => {
     <div css={messageContainer}>
       {messages.map((message) => (
         <div key={message._id} css={messageCard}>
-          <p css={messageText}>{message.text}</p>
-          <small css={messageAuthor}>Author: {message.author ? message.author : "Unknown"}</small>
-          <p css={messageLikes}>Likes: {message.likes}</p>
+          <div css={messageContent}>
+            <p css={messageText}>{message.text}</p>
+            <small css={messageAuthor}>Author: {message.author ? message.author : "Unknown"}</small>
+            <p css={messageLikes}>Likes: {message.likes}</p>
+          </div>
+          <button css={copyButton} onClick={() => copyToClipboard(message.text)}>Copy</button>
         </div>
       ))}
+      <ToastContainer />
     </div>
   );
 };
@@ -44,11 +58,19 @@ const messageContainer = css`
 `;
 
 const messageCard = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  position: relative;
+`;
+
+const messageContent = css`
+  flex: 1;
 `;
 
 const messageText = css`
@@ -66,6 +88,21 @@ const messageLikes = css`
   font-size: 0.9rem;
   font-weight: bold;
   color: #007BFF;
+`;
+
+const copyButton = css`
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007BFF;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
 
 export default MessageList;

@@ -16,7 +16,9 @@ router.get("/:id",
     //  authController.protect, 
      categoryController.getCategoryById);
 // Route to update a category by ID
-router.patch("/:id", authController.protect, categoryController.updateCategory);
+router.patch("/:id",
+  //  authController.protect, 
+   categoryController.updateCategory);
 // Route to delete a category by ID
 router.delete(
   "/:id",

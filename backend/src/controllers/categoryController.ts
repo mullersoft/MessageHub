@@ -19,7 +19,8 @@ const getCategories = catchAsync(async (req: Request, res: Response, next: NextF
     res.status(200).json({
         result:categories.length,
         status: "success",
-        data: { categories }
+        // data: { categories }
+        categories
     });
 });
 

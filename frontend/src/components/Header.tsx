@@ -1,45 +1,44 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 
 const Header: React.FC = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-
   return (
     <header css={headerStyle}>
       <Link to="/" css={logoStyle}>
         <h1>MessageHub</h1>
       </Link>
       <div css={headerActionsStyle}>
-        <Link to="/post-message" css={postMessageButtonStyle}>
+        {/* <Link to="/post-message" css={postMessageButtonStyle}>
           Add Message
-        </Link>
+        </Link> */}
         <div css={userInfoStyle}>
           <img
             src="https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png"
             alt="User Avatar"
             css={avatarStyle}
-            onClick={toggleDropdown}
           />
-          {dropdownOpen && (
-            <div css={dropdownMenuStyle}>
-              <Link to="/profile" css={dropdownItemStyle}>
-                Profile
-              </Link>
-              <button
-                css={dropdownItemStyle}
-                onClick={() => {
-                  /* Handle Logout */
-                }}
-              >
-                Logout
-              </button>
-              <button css={dropdownItemStyle}>Soon</button>
-            </div>
-          )}
+          <div css={dropdownMenuStyle}>
+            {/* <Link to="/profile" css={dropdownItemStyle}>
+              Profile
+            </Link> */}
+            <Link to="/post-message" css={dropdownItemStyle}>
+              Post Message
+            </Link>
+            <Link to="/admin" css={dropdownItemStyle}>
+              Admin
+            </Link>
+            <button
+              css={dropdownItemStyle}
+              onClick={() => {
+                /* Handle Logout */
+              }}
+            >
+              Logout
+            </button>
+            {/* <button css={dropdownItemStyle}>Soon</button> */}
+          </div>
         </div>
       </div>
     </header>
@@ -69,27 +68,10 @@ const logoStyle = css`
   }
 `;
 
-
 const headerActionsStyle = css`
   display: flex;
   align-items: center;
   gap: 1rem;
-`;
-
-const postMessageButtonStyle = css`
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #28a745;
-  color: white;
-  cursor: pointer;
-  font-size: 0.875rem;
-  text-decoration: none;
-  text-align: center;
-
-  &:hover {
-    background-color: #218838;
-  }
 `;
 
 const userInfoStyle = css`
@@ -97,6 +79,10 @@ const userInfoStyle = css`
   align-items: center;
   gap: 1rem;
   position: relative;
+
+  &:hover > div {
+    display: flex; /* Show dropdown when hovering over userInfoStyle */
+  }
 `;
 
 const avatarStyle = css`
@@ -121,7 +107,7 @@ const dropdownMenuStyle = css`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   width: 150px;
-  display: flex;
+  display: none; /* Initially hidden */
   flex-direction: column;
 `;
 

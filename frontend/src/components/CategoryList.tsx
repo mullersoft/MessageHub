@@ -4,15 +4,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store";
 import { fetchCategoriesRequest } from "../store/slices/categorySlice";
 import { useNavigate } from "react-router-dom";
-import { css } from '@emotion/react';
+import { css } from "@emotion/react";
 
 const CategoryList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { categories, loading, error } = useSelector(
-    (state: RootState) => state.categories
-  );
+  const {
+    categories = [],
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.categories);
 
   useEffect(() => {
     dispatch(fetchCategoriesRequest()); // No parameters needed if it's void
@@ -23,15 +25,19 @@ const CategoryList: React.FC = () => {
 
   return (
     <ul css={categoryContainer}>
-      {categories.map((category) => (
-        <li
-          key={category._id}
-          css={categoryItem}
-          onClick={() => navigate(`/categories/${category._id}/messages`)}
-        >
-          {category.name}
-        </li>
-      ))}
+      {Array.isArray(categories) ? (
+        categories.map((category) => (
+          <li
+            key={category._id}
+            css={categoryItem}
+            onClick={() => navigate(`/categories/${category._id}/messages`)}
+          >
+            {category.name}
+          </li>
+        ))
+      ) : (
+        <p>Invalid data format</p>
+      )}
     </ul>
   );
 };

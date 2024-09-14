@@ -1,23 +1,31 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
-// Import useDispatch from react-redux, but define a static function to simulate message posting
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { postMessageRequest } from '../store/slices/messageSlice';
+import { fetchCategoriesRequest } from '../store/slices/categorySlice';
+import { RootState } from '../store'; // Adjust the import path based on your setup
 
 const PostMessage: React.FC = () => {
   const [text, setText] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState<string | undefined>(undefined);
   const dispatch = useDispatch();
+  const categories = useSelector((state: RootState) => state.categories.categories);
+  
+  useEffect(() => {
+    dispatch(fetchCategoriesRequest());
+  }, [dispatch]);
 
-  // Simulate posting a message
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here we will simulate posting by logging to the console
-    console.log('Posting message:', { text, category });
-    // Dispatch your action here when it's available
-    // dispatch(postMessageRequest({ text, category }));
-    setText('');
-    setCategory('');
+    if (category) {
+      dispatch(postMessageRequest({ text, category }));
+      setText('');
+      setCategory(undefined);
+    } else {
+      // Handle the case where category is not selected
+      console.error('Please select a category');
+    }
   };
 
   return (
@@ -36,13 +44,18 @@ const PostMessage: React.FC = () => {
         </div>
         <div css={formGroupStyle}>
           <label htmlFor="category" css={labelStyle}>Category:</label>
-          <input 
+          <select 
             id="category" 
-            value={category} 
+            value={category || ''} 
             onChange={(e) => setCategory(e.target.value)} 
             css={inputStyle}
-            required 
-          />
+            required
+          >
+            <option value="" disabled>Select a category</option>
+            {categories.map(cat => (
+              <option key={cat._id} value={cat._id}>{cat.name}</option>
+            ))}
+          </select>
         </div>
         <button type="submit" css={submitButtonStyle}>Submit</button>
       </form>
