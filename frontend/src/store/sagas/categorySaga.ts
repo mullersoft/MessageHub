@@ -18,34 +18,35 @@ import {
   deleteCategoryFailure,
 } from '../slices/categorySlice';
 import { ICategory } from '../../types';
+const apiUrl = process.env.REACT_APP_API_URL;
 
 // API calls
 const fetchCategoriesApi = async (): Promise<ICategory[]> => {
-  const response = await axios.get('/api/v1/categories');
+  const response = await axios.get(`${apiUrl}/api/v1/categories`);
   // Adjust to match the backend response format
   return response.data.categories;
 };
 
 const fetchCategoryByIdApi = async (id: string): Promise<ICategory> => {
-  const response = await axios.get(`/api/v1/categories/${id}`);
+  const response = await axios.get(`${apiUrl}/api/v1/categories/${id}`);
   // Adjust to match the backend response format
   return response.data.data.category;
 };
 
 const createCategoryApi = async (category: { name: string }): Promise<ICategory> => {
-  const response = await axios.post('/api/v1/categories', category);
+  const response = await axios.post(`${apiUrl}/api/v1/categories`, category);
   // Adjust to match the backend response format
   return response.data.data.category;
 };
 
 const updateCategoryApi = async (id: string, category: { name: string }): Promise<ICategory> => {
-  const response = await axios.patch(`/api/v1/categories/${id}`, category); // Change PUT to PATCH
+  const response = await axios.patch(`${apiUrl}/api/v1/categories/${id}`, category); // Change PUT to PATCH
   return response.data.data.category;
 };
 
 
 const deleteCategoryApi = async (id: string): Promise<void> => {
-  await axios.delete(`/api/v1/categories/${id}`);
+  await axios.delete(`${apiUrl}/api/v1/categories/${id}`);
 };
 
 // Sagas

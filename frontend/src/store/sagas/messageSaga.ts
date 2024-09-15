@@ -18,11 +18,12 @@ import {
   updateMessageFailure,
 } from "../slices/messageSlice";
 import { IMessage } from "../../types";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 // API calls
 export const fetchMessagesApi = async (categoryId: string | undefined): Promise<IMessage[]> => {
   const response = await fetch(
-    `/api/v1/messages/categories/${categoryId}/messages`
+    `${apiUrl}/api/v1/messages/categories/${categoryId}/messages`
   );
   if (!response.ok) throw new Error("Failed to fetch messages");
   const data = await response.json();
@@ -30,22 +31,22 @@ export const fetchMessagesApi = async (categoryId: string | undefined): Promise<
 };
 
 const fetchMessagesForAdminApi = async (): Promise<IMessage[]> => {
-  const response = await axios.get("/api/v1/messages");
+  const response = await axios.get(`${apiUrl}/api/v1/messages`);
   if (response.status !== 200) throw new Error("Failed to fetch messages");
   return response.data.data; // Ensure this is an array
 };
 
 const postMessageApi = async (messageData: { text: string; category: string }): Promise<IMessage> => {
-  const response = await axios.post('/api/v1/messages', messageData);
+  const response = await axios.post(`${apiUrl}/api/v1/messages`, messageData);
   if (response.status !== 201) throw new Error('Failed to post message');
   return response.data.data;
 };
 
 const deleteMessageApi = async (messageId: string): Promise<void> => {
-  await axios.delete(`/api/v1/messages/${messageId}`);
+  await axios.delete(`${apiUrl}/api/v1/messages/${messageId}`);
 };
 const updateMessageApi = async (messageId: string, messageData: { text: string; category: string }): Promise<IMessage> => {
-  const response = await axios.patch(`/api/v1/messages/${messageId}`, messageData);
+  const response = await axios.patch(`${apiUrl}/api/v1/messages/${messageId}`, messageData);
   if (response.status !== 200) throw new Error('Failed to update message');
   return response.data.data;
 };
